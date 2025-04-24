@@ -16,10 +16,10 @@ const Community = () => {
           source={require('../assets/animations/coming.json')}
           autoPlay
           loop
-          style={{ width: 250, height: 250 }}
+          style={{ width: 200, height: 200 }}
         />
 
-        <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-Bold', marginTop: 20, color: '#333', textAlign: 'center' }}>
+        <Text style={{ fontSize: responsiveFontSize(2.3), fontFamily: 'Poppins-Bold', marginTop: 20, color: '#333', textAlign: 'center' }}>
           Community Feature Coming Soon. Stay tuned!
         </Text>
 

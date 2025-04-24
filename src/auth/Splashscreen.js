@@ -2,6 +2,7 @@ import { View, Animated, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const Splashscreen = () => {
 
@@ -32,7 +33,7 @@ const Splashscreen = () => {
 
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 2500,
+            duration: 3000,
             useNativeDriver: true
         }).start();
 
@@ -47,7 +48,7 @@ const Splashscreen = () => {
         <LinearGradient colors={["#86c9c9", "#d8f5f4"]} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <StatusBar hidden={true} />
 
-            <View style={{ width: 150, height: 130, marginLeft: 30, marginBottom: 30 }}>
+            <View style={{ width: 130, height: 110, marginLeft: 30, marginBottom: 20 }}>
                 <Animated.Image
                     source={require('../assets/logoback.png')}
                     style={{ width: '80%', height: '100%', resizeMode: 'contain', marginBottom: 20, transform: [{ scale: logoScale }], opacity: fadeAnim, borderRadius: 20 }}
@@ -55,8 +56,8 @@ const Splashscreen = () => {
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-                {"Calmpsace".split('').map((char, index) => (
-                    <Animated.Text key={index} style={{ fontFamily: 'Poppins-Bold', fontSize: 26, fontWeight: '600', color: '#5db7b7', letterSpacing: 8, transform: animations[index].getTranslateTransform(), opacity: fadeAnim }}>
+                {"Calmspace".split('').map((char, index) => (
+                    <Animated.Text key={index} style={{ fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(2.7), fontWeight: '600', color: '#5db7b7', letterSpacing: 10, transform: animations[index].getTranslateTransform(), opacity: fadeAnim }}>
                         {char}
                     </Animated.Text>
                 ))}

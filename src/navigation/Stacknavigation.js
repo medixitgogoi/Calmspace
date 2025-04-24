@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import AuthStackNavigator from './AuthStackNavigator';
 import GuestStackNavigator from './GuestStackNavigator';
-import { addUser } from '../redux/UserSlice';
+import { addUser } from '../redux/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-axios.defaults.baseURL = 'https://calmspace-backend-p016.onrender.com/api/';
+axios.defaults.baseURL = 'https://calmspace-ts-server.onrender.com/api/';
 
 const Stacknavigation = () => {
 

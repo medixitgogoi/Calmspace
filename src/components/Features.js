@@ -1,18 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, FlatList, Animated, Dimensions, TouchableOpacity } from 'react-native';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { primary } from '../utils/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import { fetchFeatures } from '../utils/fetchFeatures';
+import { useSelector } from 'react-redux';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.7;
 const SIDE_CARD_WIDTH = width * 0.6;
 const SPACING = 20;
 
+// const features = [
+//     { title: "AI Chat Support", subtitle: "Instant AI-powered help." },
+//     { title: "Mood Tracker", subtitle: "Track and analyze emotions." },
+//     { title: "Guided Meditation", subtitle: "Expert-led meditation." },
+//     { title: "Personalized Therapy Plans", subtitle: "Get customized help." },
+//     { title: "Daily Affirmations", subtitle: "Boost positivity with daily quotes." },
+//     { title: "Sleep Sounds", subtitle: "Relaxing sounds for better sleep." },
+//     { title: "Therapist Matching", subtitle: "Find the right therapist for you." },
+// ];
+
 const Features = () => {
+
+    const userDetails = useSelector(state => state.user);
+
+    const authToken = userDetails?.[0]?.authToken;
 
     const [loading, setLoading] = useState(true);
     const [features, setFeatures] = useState([]);
@@ -23,7 +38,8 @@ const Features = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchFeatures();
+                const data = await fetchFeatures(authToken);
+
                 setFeatures(data);
             } catch (error) {
                 console.log('Error fetching features: ', error);
@@ -71,11 +87,11 @@ const Features = () => {
     };
 
     return (
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: 15 }}>
             {/* Title */}
             <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10, paddingLeft: 10 }}>
                 <Ionicons name="time-outline" size={24} color="#2D9596" style={{ marginRight: 5 }} />
-                <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-Bold' }}>Upcoming Features</Text>
+                <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-Bold' }}>Upcoming Features</Text>
             </View>
 
             {loading ? (
@@ -96,7 +112,7 @@ const Features = () => {
                     )}
                 />
             ) : (
-                <View style={{ height: 230 }}>
+                <View style={{ height: responsiveHeight(27), alignItems: 'flex-start', justifyContent: 'center', flexDirection: 'row', paddingTop: 10 }}>
                     <Animated.FlatList
                         data={features}
                         keyExtractor={(item, index) => index.toString()}

@@ -1,20 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useState } from 'react';
-import {
-    Dimensions,
-    Image,
-    StatusBar,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-    ScrollView,
-    ImageBackground,
-    TouchableWithoutFeedback
-} from 'react-native';
+import { Dimensions, Image, StatusBar, Text, TextInput, TouchableOpacity, View, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { logoutUser } from '../redux/UserSlice';
+import { logoutUser } from '../redux/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Ionicons from 'react-native-vector-icons/Ionicons';

@@ -2,13 +2,18 @@ import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { primary, secondary } from '../utils/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { fetchBlogs } from '../utils/fetchBlogs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSelector } from 'react-redux';
 
 const Blogs = ({ navigation }) => {
+
+    const userDetails = useSelector(state => state.user);
+
+    const authToken = userDetails?.[0]?.authToken;
 
     const [loading, setLoading] = useState(true);
 
@@ -18,7 +23,7 @@ const Blogs = ({ navigation }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchBlogs(); // Fetch all questions
+                const data = await fetchBlogs(authToken); // Fetch all questions
                 console.log('blogs: ', data);
 
                 setBlogs(data);
@@ -57,13 +62,13 @@ const Blogs = ({ navigation }) => {
     };
 
     return (
-        <View style={{ }}>
+        <View style={{ marginTop: 15 }}>
 
             {/* Headline */}
             <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10, marginHorizontal: 10 }}>
                 <Ionicons name="happy-outline" size={24} color="#2D9596" style={{ marginRight: 5 }} />
 
-                <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-Bold' }}>
+                <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-Bold' }}>
                     Mental Health Blogs
                 </Text>
             </View>
@@ -91,7 +96,7 @@ const Blogs = ({ navigation }) => {
                     )}
                 />
             ) : (
-                <View style={{ height: 330 }}>
+                <View style={{ paddingVertical: 10 }}>
                     <FlatList
                         data={blogs}
                         horizontal
@@ -101,11 +106,11 @@ const Blogs = ({ navigation }) => {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={{
-                                    width: 220,
+                                    width: 200,
                                     backgroundColor: '#f9f5e9',
                                     borderRadius: 16,
-                                    paddingBottom: 15,
                                     marginRight: 15,
+                                    paddingBottom: 15, // ✅ Add paddingBottom here
                                 }}
                                 onPress={() => navigation.navigate('BlogDetails', { data: item })}
                             >
@@ -120,7 +125,7 @@ const Blogs = ({ navigation }) => {
                                     style={{
                                         backgroundColor: primary,
                                         alignSelf: 'flex-start',
-                                        paddingHorizontal: 12,
+                                        paddingHorizontal: 10,
                                         paddingVertical: 3,
                                         borderRadius: 8,
                                         marginLeft: 10,
@@ -144,9 +149,12 @@ const Blogs = ({ navigation }) => {
                                     </Text>
                                 </View>
 
+                                {/* Time */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 5 }}>
                                     <Icon name="clock-o" size={16} color={'#555'} style={{ marginRight: 4 }} />
-                                    <Text style={{ color: '#555', fontSize: responsiveFontSize(1.4), fontFamily: 'Poppins-Regular', paddingTop: 3 }}>{getTimeAgo(item?.createdAt)}</Text>
+                                    <Text style={{ color: '#555', fontSize: responsiveFontSize(1.4), fontFamily: 'Poppins-Regular', paddingTop: 3 }}>
+                                        {getTimeAgo(item?.createdAt)}
+                                    </Text>
                                 </View>
                             </TouchableOpacity>
                         )}

@@ -1,29 +1,31 @@
 import LottieView from 'lottie-react-native';
-import { View, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Keyboard, ActivityIndicator, StatusBar } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Keyboard, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import { primary } from '../utils/colors';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../redux/UserSlice';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { addUser } from '../redux/userSlice';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { setAuthStatus } from '../redux/socket/userSocketSlice';
+import useSocket from '../hooks/useSocket';
 
 const Login = ({ navigation }) => {
 
-    const dispatch = useDispatch()
+    const { connectSocket } = useSocket(); // pull in connectSocket
+
+    const dispatch = useDispatch();
 
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
     const [show, setShow] = useState(true);
 
     const [password, setPassword] = useState('');
-    // const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
     const [email, setEmail] = useState('');
-    // const [isMobileFocused, setIsMobileFocused] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -74,7 +76,7 @@ const Login = ({ navigation }) => {
             console.log('login response: ', response);
 
             // Handle success response
-            if (response?.data?.status_code === 201) {
+            if (response?.data?.status_code === 200) {
 
                 Toast.show({
                     type: 'success',
@@ -90,16 +92,17 @@ const Login = ({ navigation }) => {
                 };
 
                 dispatch(addUser(userInfo));
+                dispatch(setAuthStatus(true)); // ✅ set auth status
+
                 await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+                connectSocket(); // ✅ call socket connection here
 
                 if (response?.data?.profileStatus) {
                     navigation.navigate('Home')
                 } else {
                     navigation.navigate('Welcome')
                 }
-
-                setEmail('');
-                setPassword('');
 
             } else if (response?.data?.status_code === 405) {
                 Toast.show({
@@ -135,6 +138,9 @@ const Login = ({ navigation }) => {
                 topOffset: 40,
             });
         } finally {
+            setEmail('');
+            setPassword('');
+
             setLoading(false);
         }
     };
@@ -145,9 +151,7 @@ const Login = ({ navigation }) => {
                 style={{ flex: 1, backgroundColor: '#fff' }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <StatusBar animated={true} hidden={true} />
-
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     {/* Background and Top Design */}
                     <View style={{ height: '50%', width: '100%', transition: 'height 0.3s ease-in-out' }}>
 
@@ -155,14 +159,14 @@ const Login = ({ navigation }) => {
 
                         {/* Lights */}
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', position: 'absolute', top: 0, paddingHorizontal: 20 }}>
-                            <Image source={require('../assets/light.png')} style={{ height: isKeyboardVisible ? 190 : 290, width: 140 }} resizeMode="contain" />
-                            <Image source={require('../assets/light.png')} style={{ height: isKeyboardVisible ? 130 : 180, width: 100 }} resizeMode="contain" />
+                            <Image source={require('../assets/light.png')} style={{ height: isKeyboardVisible ? responsiveHeight(20) : responsiveHeight(33), width: 140 }} resizeMode="contain" />
+                            <Image source={require('../assets/light.png')} style={{ height: isKeyboardVisible ? responsiveHeight(10) : responsiveHeight(17), width: 100 }} resizeMode="contain" />
                         </View>
 
                         <View style={{ position: 'absolute', bottom: 0, width: '100%', alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
-                            <Text style={{ color: '#1f8dba', fontWeight: '500', fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', textAlign: 'center' }}>Start your journey to well-being today</Text>
+                            <Text style={{ color: '#1f8dba', fontWeight: '500', fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', textAlign: 'center' }}>Start your journey to well-being today</Text>
 
-                            <View style={{ width: 40, height: 40 }}>
+                            <View style={{ width: 35, height: 35 }}>
                                 <LottieView source={require('../assets/animations/login.json')} autoPlay loop style={{ width: '100%', height: '100%' }} />
                             </View>
                         </View>
@@ -175,7 +179,7 @@ const Login = ({ navigation }) => {
                         keyboardShouldPersistTaps="handled"
                         showsVerticalScrollIndicator={false}
                     >
-                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(3), textAlign: 'center', marginVertical: 40, color: '#000', textTransform: 'uppercase' }}>Login</Text>
+                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(2.8), textAlign: 'center', marginVertical: 30, color: '#000', textTransform: 'uppercase' }}>Login</Text>
 
                         {/* Email */}
                         <TextInput
@@ -185,11 +189,11 @@ const Login = ({ navigation }) => {
                             onChangeText={setEmail}
                             keyboardType='email-address'
                             selectionColor={primary}
-                            style={{ height: 50, fontFamily: 'Poppins-SemiBold', backgroundColor: '#f3f3f3', borderColor: '#1f8dba', borderWidth: 1.5, fontWeight: '600', fontSize: responsiveFontSize(1.8), borderRadius: 15, paddingHorizontal: 15, marginBottom: 20, color: '#000' }}
+                            style={{ height: 48, fontFamily: 'Poppins-SemiBold', backgroundColor: '#f3f3f3', borderColor: '#1f8dba', borderWidth: 1.5, fontWeight: '600', fontSize: responsiveFontSize(1.8), borderRadius: 12, paddingHorizontal: 15, marginBottom: 20, color: '#000' }}
                         />
 
                         {/* Password */}
-                        <View style={{ flexDirection: 'row', height: 50, borderRadius: 15, alignItems: 'center', borderColor: '#1f8dba', borderWidth: 1.5, backgroundColor: '#f3f3f3', borderRadius: 15, paddingHorizontal: 10, marginBottom: 20 }}>
+                        <View style={{ flexDirection: 'row', height: 48, borderRadius: 15, alignItems: 'center', borderColor: '#1f8dba', borderWidth: 1.5, backgroundColor: '#f3f3f3', borderRadius: 12, paddingHorizontal: 10, marginBottom: 4 }}>
                             <TextInput
                                 placeholder="Password"
                                 value={password}
@@ -216,10 +220,16 @@ const Login = ({ navigation }) => {
                             </View>
                         </View>
 
+                        {/* Forgot password */}
+                        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={{ marginBottom: 20, alignSelf: 'flex-end' }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.5), color: '#1f8dba', fontFamily: 'Poppins-Medium', textDecorationLine: 'underline' }}>Forgot password?</Text>
+                        </TouchableOpacity>
+
                         {/* Login */}
                         <TouchableOpacity
                             onPress={handleLoginSubmit}
-                            style={{ backgroundColor: '#1f8dba', height: 58, borderRadius: 15, justifyContent: 'center', alignItems: 'center' }}
+                            disabled={loading}
+                            style={{ backgroundColor: '#1f8dba', height: 50, borderRadius: 15, justifyContent: 'center', alignItems: 'center' }}
                         >
                             {loading ? (
                                 <ActivityIndicator size='large' color={'#fff'} />
@@ -229,15 +239,15 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
 
                         {/* Sign up / Don't have an account */}
-                        <TouchableOpacity style={{ marginTop: 15, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', gap: 5 }}>
-                            <Text style={{ color: '#bdbdbd', fontSize: responsiveFontSize(1.6), fontWeight: '500', fontFamily: 'Poppins-Medium' }}>Don't have an account?</Text>
+                        <TouchableOpacity style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', gap: 4 }}>
+                            <Text style={{ color: '#bdbdbd', fontSize: responsiveFontSize(1.5), fontWeight: '500', fontFamily: 'Poppins-Medium' }}>Don't have an account?</Text>
 
                             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                                <Text style={{ color: '#1f8dba', fontWeight: '600', fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.7) }}>Sign Up</Text>
+                                <Text style={{ color: '#1f8dba', fontWeight: '600', fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.5) }}>Sign Up</Text>
                             </TouchableOpacity>
                         </TouchableOpacity>
                     </ScrollView>
-                </SafeAreaView>
+                </View>
             </KeyboardAvoidingView>
         </SafeAreaProvider>
     );

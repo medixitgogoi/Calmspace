@@ -68,7 +68,7 @@ const DailyQuote = () => {
             <Animated.Text
                 style={{
                     color: '#fff',
-                    fontSize: responsiveFontSize(1.8),
+                    fontSize: responsiveFontSize(1.7),
                     fontFamily: 'Poppins-SemiBoldItalic',
                     textAlign: 'center',
                     opacity: fadeAnim,

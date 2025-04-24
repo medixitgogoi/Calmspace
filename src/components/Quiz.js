@@ -56,14 +56,14 @@ const Quiz = () => {
             <View style={{ width: '40%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
                     source={require('../assets/quiz.png')}
-                    style={{ width: '100%', height: 120, marginRight: 15 }}
+                    style={{ width: '100%', height: 100, marginRight: 15 }}
                     resizeMode="cover"
                 />
             </View>
 
             {/* Right Side - Text & Button */}
             <View style={{ width: '60%', flexDirection: 'column', justifyContent: 'space-between', gap: 15 }}>
-                <Text style={{ fontSize: responsiveFontSize(1.7), color: '#333', fontFamily: 'Poppins-SemiBold', textAlign: 'center' }}>
+                <Text style={{ fontSize: responsiveFontSize(1.6), color: '#333', fontFamily: 'Poppins-SemiBold', textAlign: 'center' }}>
                     Take a short quiz to check your mental well-being.
                 </Text>
 
@@ -75,12 +75,12 @@ const Quiz = () => {
                             paddingVertical: 12,
                             borderRadius: 50,
                             alignItems: 'center',
-                            paddingHorizontal: 20,
+                            paddingHorizontal: 15,
                             borderColor: background,
-                            borderWidth: 1
+                            borderWidth: 1.5
                         }}
                     >
-                        <Text style={{ color: secondary, fontFamily: 'Poppins-Medium', fontSize: responsiveFontSize(1.9) }}>Start the Quiz</Text>
+                        <Text style={{ color: secondary, fontFamily: 'Poppins-Medium', fontSize: responsiveFontSize(1.8) }}>Start the Quiz</Text>
                     </TouchableOpacity>
                 </Animated.View>
             </View>

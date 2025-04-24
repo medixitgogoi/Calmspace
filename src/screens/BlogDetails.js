@@ -37,12 +37,12 @@ const BlogDetails = ({ route }) => {
 
                 {/* Back Button */}
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ alignSelf: 'flex-start', width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: 12 }}>
-                    <Ionicons name="arrow-back" size={30} color={'#000'} />
+                    <Ionicons name="arrow-back" size={27} color={'#000'} />
                 </TouchableOpacity>
 
                 {/* Category Header */}
                 {data?.category && (
-                    <Text style={{ fontSize: 24, fontFamily: 'Poppins-Bold', color: primary, textAlign: 'center', marginBottom: 10 }}>
+                    <Text style={{ fontSize: responsiveFontSize(2.6), fontFamily: 'Poppins-Bold', color: primary, textAlign: 'center', marginBottom: 5 }}>
                         {data.category}
                     </Text>
                 )}
@@ -51,14 +51,14 @@ const BlogDetails = ({ route }) => {
 
                     {/* Title */}
                     {data?.title && (
-                        <Text style={{ fontSize: 22, fontFamily: 'Poppins-SemiBold', color: '#333' }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), fontFamily: 'Poppins-SemiBold', color: '#333' }}>
                             {data.title}
                         </Text>
                     )}
 
                     {/* Author & Date */}
                     {(data?.author || data?.createdAt) && (
-                        <Text style={{ fontSize: 14, fontFamily: 'Poppins-Medium', color: '#555', marginBottom: 15 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), fontFamily: 'Poppins-Medium', color: '#555', marginBottom: 15 }}>
                             {data?.author ? `By ${data.author}` : ''} {data?.createdAt ? `• ${getTimeAgo(data.createdAt)}` : ''}
                         </Text>
                     )}
@@ -75,7 +75,7 @@ const BlogDetails = ({ route }) => {
                     {/* Description Section */}
                     {data?.desc && (
                         <View style={{ backgroundColor: secondary, padding: 14, borderRadius: 15, marginBottom: 12 }}>
-                            <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#444' }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#444' }}>
                                 {data.desc}
                             </Text>
                         </View>
@@ -95,13 +95,13 @@ const BlogDetails = ({ route }) => {
                         data.content.map((item, index) => (
                             <View key={index} style={{ marginBottom: 12 }}>
                                 {item.title && (
-                                    <Text style={{ fontSize: 18, fontFamily: 'Poppins-SemiBold', color: primary, marginBottom: 4 }}>
+                                    <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-SemiBold', color: primary, marginBottom: 4 }}>
                                         {index + 1}. {item.title}
                                     </Text>
                                 )}
 
                                 {item.body && (
-                                    <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#666' }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Regular', color: '#666' }}>
                                         {item.body}
                                     </Text>
                                 )}
@@ -116,7 +116,7 @@ const BlogDetails = ({ route }) => {
                     {/* Message Section */}
                     {data?.message && (
                         <View style={{ backgroundColor: primary, padding: 15, borderRadius: 15, marginBottom: 12 }}>
-                            <Text style={{ fontSize: 16, fontFamily: 'Poppins-SemiBold', color: '#fff' }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-SemiBold', color: '#fff' }}>
                                 {data.message}
                             </Text>
                         </View>

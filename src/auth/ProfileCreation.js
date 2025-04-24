@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addUser } from '../redux/UserSlice';
+import { addUser } from '../redux/userSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
@@ -31,7 +31,7 @@ const ProfileCreation = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [finishLoading, setFinishLoading] = useState(false);
 
-    // Fetch data
+    // Fetch questions
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -171,7 +171,7 @@ const ProfileCreation = ({ navigation }) => {
 
                     {/* Back button */}
                     <TouchableOpacity onPress={handleBack} disabled={currentQuestion === 0} style={{ marginBottom: 40, marginTop: 10 }}>
-                        <Icon name="arrow-left" size={24} color={currentQuestion === 0 ? '#ccc' : '#000'} />
+                        <Icon name="arrow-left" size={22} color={currentQuestion === 0 ? '#ccc' : '#000'} />
                     </TouchableOpacity>
 
                     {/* Question */}
@@ -180,7 +180,7 @@ const ProfileCreation = ({ navigation }) => {
                             style={{ width: '100%', height: 50, borderRadius: 10, marginBottom: 30 }}
                         />
                     ) : (
-                        <Text style={{ fontSize: responsiveFontSize(3), fontFamily: 'Poppins-Bold', marginBottom: 30, color: '#000' }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.5), fontFamily: 'Poppins-Bold', marginBottom: 30, color: '#000' }}>
                             {questions?.[currentQuestion]?.question}
                         </Text>
                     )}
@@ -205,9 +205,9 @@ const ProfileCreation = ({ navigation }) => {
                                         borderColor: '#1f8dba',
                                         borderWidth: 2,
                                         backgroundColor: selected?.includes(response) ? '#1f8dba' : '#e1f3fa',
-                                        paddingVertical: 13,
+                                        paddingVertical: 10,
                                         paddingHorizontal: 15,
-                                        borderRadius: 40,
+                                        borderRadius: 38,
                                         marginBottom: 20,
                                         alignItems: 'center',
                                         justifyContent: 'flex-start',
@@ -254,12 +254,12 @@ const ProfileCreation = ({ navigation }) => {
                 <TouchableOpacity onPress={handleNext} disabled={isNextDisabled}>
                     <LinearGradient
                         colors={isNextDisabled ? ['#c9c9c9', '#c9c9c9'] : ['#53b6e1', '#1b7ba2']}
-                        style={{ height: 55, paddingHorizontal: 20, borderRadius: 60, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                        style={{ height: 50, paddingHorizontal: 20, borderRadius: 60, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
                     >
                         {finishLoading ? (
                             <ActivityIndicator size={'large'} color="#fff" />
                         ) : (
-                            <Text style={{ color: '#ffffff', fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(2.2), textAlign: 'center' }}>
+                            <Text style={{ color: '#ffffff', fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(2), textAlign: 'center' }}>
                                 {currentQuestion === questions?.length - 1 ? 'Finish' : 'Next'}
                             </Text>
                         )}

@@ -17,7 +17,7 @@ import Boost from '../screens/Boost';
 import Community from '../screens/Community';
 import { StyleSheet } from 'react-native';
 import { secondary } from '../utils/colors';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import BlogDetails from '../screens/BlogDetails';
 import CounselorDetails from '../screens/CounselorDetails';
 
@@ -34,19 +34,19 @@ const TabNavigator = () => {
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarStyle: {
-                    height: 65,
+                    height: responsiveHeight(6.5),
                     backgroundColor: '#309e9f',
                     borderTopLeftRadius: 18,
                     borderTopRightRadius: 18,
                     overflow: 'hidden',
                 },
                 tabBarBackground: () => <TabBarBackground />,
-                tabBarItemStyle: { paddingVertical: 5 },
+                tabBarItemStyle: { paddingVertical: 3 },
                 tabBarActiveTintColor: secondary,
                 tabBarInactiveTintColor: '#fff',
                 tabBarLabelStyle: { fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.2) },
                 tabBarIcon: ({ color, focused }) => {
-                    const iconSize = focused ? 26 : 22;
+                    const iconSize = focused ? 22 : 18;
                     color = focused ? secondary : '#fff';
 
                     if (route.name === "Home") {
@@ -67,7 +67,7 @@ const TabNavigator = () => {
                     }
                 },
                 tabBarLabel: ({ focused, color }) => (
-                    <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: focused ? responsiveFontSize(1.4) : responsiveFontSize(1.2), color }}>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: focused ? responsiveFontSize(1.3) : responsiveFontSize(1.1), color }}>
                         {route.name === "AiChat" ? "AI Chat" : route.name}
                     </Text>
                 ),
@@ -114,13 +114,6 @@ const styles = StyleSheet.create({
         flex: 1,
         borderTopLeftRadius: 18,
         borderTopRightRadius: 18,
-    },
-    activeTabIndicator: {
-        width: 30,
-        height: 3,
-        backgroundColor: secondary,
-        borderRadius: 2,
-        marginBottom: 3,
     },
 });
 

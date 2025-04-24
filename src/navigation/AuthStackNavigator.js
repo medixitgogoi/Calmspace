@@ -3,6 +3,7 @@ import Login from '../auth/Login';
 import SignUp from '../auth/SignUp';
 import OnboardingScreen from '../auth/OnboardingScreen';
 import Splashscreen from '../auth/Splashscreen';
+import ForgotPassword from '../auth/ForgotPassword';
 
 const AuthStackNavigator = ({ initialRoute }) => {
 
@@ -19,6 +20,7 @@ const AuthStackNavigator = ({ initialRoute }) => {
             <Stack.Screen name="Splashscreen" component={Splashscreen} />
             <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
     );

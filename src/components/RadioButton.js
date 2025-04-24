@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { primary } from '../utils/colors';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const RadioButton = ({ label, selected, onPress }) => {
     return (
@@ -8,8 +9,8 @@ const RadioButton = ({ label, selected, onPress }) => {
             onPress={onPress}
         >
             <View style={{
-                height: 22,
-                width: 22,
+                height: 20,
+                width: 20,
                 borderRadius: 12,
                 borderWidth: 2,
                 borderColor: selected ? '#1f8dba' : '#a6a6a6',
@@ -18,15 +19,15 @@ const RadioButton = ({ label, selected, onPress }) => {
             }}>
                 {selected && (
                     <View style={{
-                        height: 12,
-                        width: 12,
+                        height: 10,
+                        width: 10,
                         borderRadius: 6,
                         backgroundColor: '#1f8dba',
                     }} />
                 )}
             </View>
 
-            <Text style={{ marginLeft: 10, color: primary, fontFamily: 'Poppins-SemiBold', fontSize: 15 }}>{label}</Text>
+            <Text style={{ marginLeft: 8, color: primary, fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(2) }}>{label}</Text>
             
         </TouchableOpacity>
     );

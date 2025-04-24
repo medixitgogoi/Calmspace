@@ -24,7 +24,7 @@ const Home = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   const isAndroid15 = Platform.OS === 'android' && Platform.Version >= 15;
-  console.log('isAndroid15: ', isAndroid15);
+  // console.log('isAndroid15: ', isAndroid15);
 
   const [userName, setUserName] = useState(null);
   const [profileScore, setProfileScore] = useState(null);
@@ -126,31 +126,35 @@ const Home = ({ navigation }) => {
       {/* Header */}
       <ImageBackground
         source={require('../assets/imgback.jpg')}
-        style={{ overflow: 'hidden', paddingTop: isAndroid15 ? 37 : 0, paddingBottom: 30, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}
+        style={{ overflow: 'hidden', paddingTop: isAndroid15 ? 40 : 0, paddingBottom: 30, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}
         resizeMode="cover"
       >
         {/* Info display */}
-        <View style={{ height: responsiveHeight(7), flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '', paddingHorizontal: 10 }}>
+        <View style={{ height: responsiveHeight(6), flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '', paddingHorizontal: 10 }}>
           {/* Logo/display name */}
           <View style={{ backgroundColor: '', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
             {/* logo */}
-            <Image source={require('../assets/logoback_noName.png')} style={{ height: 48, width: 48 }} />
+            <Image source={require('../assets/logoback_noName.png')} style={{ height: 40, width: 40 }} />
 
             {/* name and location */}
             <View style={{ flexDirection: 'column' }}>
-              <Text style={{ color: '#fff', fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.9), marginLeft: 2 }}>Hi, {userName?.split(' ')?.[0] || 'User'}</Text>
+              <Text style={{ color: '#fff', fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.8), marginLeft: 2 }}>Hi, {userName?.split(' ')?.[0] || 'User'}</Text>
 
-              <View style={{ flexDirection: 'row', gap: 3, alignItems: 'flex-start', backgroundColor: '' }}>
-                <Ionicons name="location" size={15} color={background} />
-                <Text style={{ color: secondary, fontFamily: 'Poppins-Medium', fontSize: responsiveFontSize(1.5) }}>Ganeshguri, Guwahati</Text>
-              </View>
+              {/* Temporary */}
+              <Text style={{ color: secondary, fontFamily: 'Poppins-Medium', fontSize: responsiveFontSize(1.6), marginLeft: 2 }}>Welcome back!</Text>
+
+              {/* <View style={{ flexDirection: 'row', gap: 3, alignItems: 'flex-start', backgroundColor: '' }}>
+                <Ionicons name="location" size={13} color={background} />
+                <Text style={{ color: secondary, fontFamily: 'Poppins-Medium', fontSize: responsiveFontSize(1.4) }}>Ganeshguri, Guwahati</Text>
+              </View> */}
+
             </View>
           </View>
 
           {/* Profile */}
           <View style={{ flex: 0.3, backgroundColor: '', flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 6, paddingRight: 5 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={{ paddingTop: 4, backgroundColor: secondary, width: 40, height: 40, borderRadius: 50, borderColor: '#fff', borderWidth: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ color: primary, fontSize: responsiveFontSize(2.6), fontFamily: 'Poppins-SemiBold' }}>{userName?.slice(0, 1) || 'U'}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={{ paddingTop: 4, backgroundColor: secondary, width: 35, height: 35, borderRadius: 50, borderColor: '#fff', borderWidth: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: primary, fontSize: responsiveFontSize(2.5), fontFamily: 'Poppins-SemiBold' }}>{userName?.slice(0, 1) || 'U'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -161,13 +165,13 @@ const Home = ({ navigation }) => {
         </View>
 
         {/* Banner */}
-        <View style={{ height: responsiveHeight(13), flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '', marginBottom: 0 }}>
-          <Image source={require('../assets/banner.png')} style={{ width: '100%', height: responsiveHeight(15) }} resizeMode='contain' />
+        <View style={{ height: responsiveHeight(13), flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
+          <Image source={require('../assets/banner.png')} style={{ width: '100%', height: responsiveHeight(14) }} resizeMode='contain' />
         </View>
       </ImageBackground >
 
       {/* Content */}
-      <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={{ paddingVertical: 15 }} nestedScrollEnabled={true}>
+      <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }} nestedScrollEnabled={true}>
 
         {loading ? (
           <View style={{ marginHorizontal: 12 }}>

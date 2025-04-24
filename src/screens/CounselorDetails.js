@@ -1,10 +1,11 @@
 import { View, Text, StatusBar, TouchableOpacity, ScrollView, Image, Dimensions } from 'react-native';
 import { useRef, useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { background, primary } from '../utils/colors';
+import { background, primary, secondary } from '../utils/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const { width } = Dimensions.get('window');
 
@@ -37,56 +38,60 @@ const CounselorDetails = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center' }}>
             <Ionicons name="arrow-back" size={27} color={'#333'} />
           </TouchableOpacity>
+
           <Text style={{ fontSize: responsiveFontSize(2.5), fontFamily: 'Poppins-SemiBold', color: '#000', paddingTop: 2 }}>Counselor Details</Text>
+
           <View style={{ width: 35, height: 35 }}></View>
         </View>
 
         {/* Scrollable Info */}
-        <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
           {/* Image & Basic Info */}
           <View style={{ alignItems: 'center', marginTop: 10 }}>
-            <Image source={require('../assets/avatar.jpg')} style={{ width: 150, height: 150, borderRadius: 75 }} />
-            <Text style={{ fontSize: responsiveFontSize(2.8), fontFamily: 'Poppins-SemiBold', color: '#000', marginTop: 10 }}>{counselor.name}</Text>
-            <Text style={{ fontSize: responsiveFontSize(2), fontFamily: 'Poppins-Medium', color: '#666' }}>{counselor.budget}</Text>
+            <Image source={{ uri: counselor?.counselorId?.pic }} style={{ width: 140, height: 140, borderRadius: 75 }} resizeMode='cover' />
+
+            <Text style={{ fontSize: responsiveFontSize(2.5), fontFamily: 'Poppins-SemiBold', color: '#000', marginTop: 10 }}>{counselor?.counselorId?.name} <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium' }}>{counselor?.counselorId?.gender === 'Male' ? `(He/Him)` : `(She/her)`}</Text></Text>
+
+            <Text style={{ fontSize: responsiveFontSize(2), fontFamily: 'Poppins-SemiBold', color: '#333' }}>₹{counselor?.priceId?.video}</Text>
           </View>
 
           {/* Info */}
           <View style={{ marginVertical: 20 }}>
             {/* Education */}
-            <View style={{ backgroundColor: '#e5f7f7', padding: 15, borderRadius: 18, elevation: 2, flexDirection: 'row', marginBottom: 15, marginHorizontal: 20 }}>
-              <Ionicons name="school-outline" size={22} color={'#000'} style={{ marginTop: 2 }} />
+            <View style={{ backgroundColor: '#e5f7f7', padding: 13, borderRadius: 16, elevation: 2, flexDirection: 'row', marginBottom: 15, marginHorizontal: 20 }}>
+              <Ionicons name="school-outline" size={20} color={'#000'} style={{ marginTop: 2 }} />
 
               <View style={{ paddingLeft: 10, flex: 1 }}>
-                <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-SemiBold', color: '#000' }}>Education</Text>
-                <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#555' }}>{counselor.education}</Text>
+                <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-SemiBold', color: '#000' }}>Education</Text>
+                <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', color: '#555' }}>{counselor?.degree}</Text>
               </View>
             </View>
 
             {/* Specialties */}
             <View style={{ backgroundColor: '#e5f7f7', padding: 15, borderRadius: 18, elevation: 2, flexDirection: 'row', marginBottom: 15, marginHorizontal: 20 }}>
-              <Ionicons name="medkit-outline" size={20} color={'#000'} style={{ marginTop: 2 }} />
+              <Ionicons name="medkit-outline" size={18} color={'#000'} style={{ marginTop: 2 }} />
 
               <View style={{ paddingLeft: 10, flex: 1 }}>
-                <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-SemiBold', color: '#000' }}>Specialties</Text>
-                <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#555' }}>{counselor.specialties.join(', ')}</Text>
+                <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-SemiBold', color: '#000' }}>Specialties</Text>
+                <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', color: '#555' }}>{counselor?.speciality?.join(', ')}</Text>
               </View>
             </View>
 
             {/* Languages */}
-            <View style={{ backgroundColor: '#e5f7f7', padding: 15, borderRadius: 18, elevation: 2, flexDirection: 'row', marginBottom: 15, marginHorizontal: 20 }}>
-              <Ionicons name="chatbubble-ellipses-outline" size={22} color={'#000'} style={{ marginTop: 2 }} />
+            <View style={{ backgroundColor: '#e5f7f7', padding: 15, borderRadius: 18, elevation: 2, flexDirection: 'row', marginBottom: 10, marginHorizontal: 20 }}>
+              <Ionicons name="chatbubble-ellipses-outline" size={20} color={'#000'} style={{ marginTop: 2 }} />
 
               <View style={{ paddingLeft: 10, flex: 1 }}>
-                <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-SemiBold', color: '#000' }}>Languages</Text>
-                <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#555' }}>{counselor.languages.join(', ')}</Text>
+                <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-SemiBold', color: '#000' }}>Languages</Text>
+                <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', color: '#555' }}>{counselor?.languages?.join(', ')}</Text>
               </View>
             </View>
 
             {/* Tabs */}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10, marginTop: 15 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 5, marginTop: 15 }}>
               {['Therapy', 'Info', 'Expertise'].map((tab, index) => (
                 <TouchableOpacity key={index} onPress={() => handleTabPress(index)} style={{ borderBottomWidth: activeTab === index ? 2.5 : 0, borderColor: '#333' }}>
-                  <Text style={{ fontSize: responsiveFontSize(2.2), fontFamily: 'Poppins-Bold', color: activeTab === index ? '#000' : '#999' }}>{tab}</Text>
+                  <Text style={{ fontSize: responsiveFontSize(2.1), fontFamily: 'Poppins-Bold', color: activeTab === index ? '#000' : '#999' }}>{tab}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -107,20 +112,19 @@ const CounselorDetails = ({ navigation, route }) => {
               contentContainerStyle={{ paddingHorizontal: 5, paddingVertical: 10 }}
             >
               <View style={{ width, paddingHorizontal: 10 }}>
-                <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#257c7c', textAlign: 'justify' }}>{counselor.therapy}</Text>
+                <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', color: '#257c7c', }}>{counselor?.therapy}</Text>
               </View>
 
               <View style={{ width, paddingHorizontal: 10 }}>
-                <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#257c7c', textAlign: 'justify' }}>{counselor.info}</Text>
+                <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', color: '#257c7c', }}>{counselor?.info}</Text>
               </View>
 
               <View style={{ width, paddingHorizontal: 10 }}>
-                <Text style={{ fontSize: responsiveFontSize(1.9), fontFamily: 'Poppins-Medium', color: '#257c7c', textAlign: 'justify' }}>{counselor.expertise}</Text>
+                <Text style={{ fontSize: responsiveFontSize(1.8), fontFamily: 'Poppins-Medium', color: '#257c7c', }}>{counselor?.expertise}</Text>
               </View>
             </ScrollView>
 
           </View>
-
         </ScrollView>
 
         {/* Schedule Appointment Button */}
@@ -142,15 +146,15 @@ const CounselorDetails = ({ navigation, route }) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                paddingVertical: 12,
+                paddingVertical: 10,
                 borderRadius: 30
               }}
             >
-              <Ionicons name="calendar-outline" size={22} color="#fff" style={{ marginRight: 8 }} />
+              <Ionicons name="calendar-outline" size={20} color="#fff" style={{ marginRight: 8 }} />
 
               <Text style={{
                 fontFamily: 'Poppins-SemiBold',
-                fontSize: responsiveFontSize(2.2),
+                fontSize: responsiveFontSize(2.1),
                 color: '#fff',
                 paddingTop: 5
               }}>

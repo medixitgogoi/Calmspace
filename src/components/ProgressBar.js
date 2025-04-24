@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { primary } from '../utils/colors';
 
@@ -54,7 +54,7 @@ const ProgressBar = ({ score }) => {
 
     return (
         <SafeAreaProvider>
-            <SafeAreaView style={{ paddingHorizontal: 20, alignItems: 'center', height: 170, paddingVertical: 0 }}>
+            <SafeAreaView style={{ paddingHorizontal: 20, alignItems: 'center', height: responsiveHeight(20), justifyContent: 'center' }}>
 
                 {/* Title with Gradient Background */}
                 <LinearGradient
@@ -177,3 +177,7 @@ const ProgressBar = ({ score }) => {
 };
 
 export default ProgressBar;
+
+
+//   const isAndroid15 = Platform.OS === 'android' && Platform.Version >= 15;
+//   console.log('isAndroid15 onboa: ', isAndroid15);

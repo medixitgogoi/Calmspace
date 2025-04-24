@@ -22,7 +22,7 @@ const AiChat = ({ navigation }) => {
     setMessages(prev => [...prev, newMessage])
 
     setTimeout(() => {
-      setMessages(prev => [...prev, { id: Date.now().toString(), text: "I'm Kiara, your AI assistant 🤖", type: 'bot' }])
+      setMessages(prev => [...prev, { id: Date.now().toString(), text: "I'm Luna, your AI assistant 🤖", type: 'bot' }])
     }, 800)
 
     setInput('')
@@ -59,7 +59,7 @@ const AiChat = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center' }}>
               <Ionicons name="arrow-back" size={27} color={'#333'} />
             </TouchableOpacity>
-            <Text style={{ fontSize: responsiveFontSize(2.5), fontFamily: 'Poppins-SemiBold', color: '#000', paddingTop: 2 }}>Chat with Kiara</Text>
+            <Text style={{ fontSize: responsiveFontSize(2.5), fontFamily: 'Poppins-SemiBold', color: '#000', paddingTop: 2 }}>Chat with Luna</Text>
             <View style={{ width: 35, height: 35 }}></View>
           </View>
 

@@ -1,10 +1,16 @@
 import axios from "axios";
 
-export const fetchBlogs = async () => {
+export const fetchBlogs = async (authToken) => {
     try {
-        const response = await axios.get('/blogs');
+        const response = await axios.get('/blogs', {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: authToken,
+            }
+        });
 
-        // console.log('blogs response: ', response);
+        console.log('blogs response: ', response);
+        
         if (response?.data?.status_code === 201) {
             return response?.data?.data; // Return user data
         }

@@ -14,12 +14,15 @@ const Stacknavigation = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
+    // console.log('userDetails from Stacknavigation: ', userDetails);
 
     const [loading, setLoading] = useState(true);
 
-    const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.authToken);
+    // Object-based login check
+    const isUserLoggedIn = userDetails?.authToken;
+    // console.log('isUserLoggedIn from Stacknavigation: ', isUserLoggedIn);
 
-    // Load login details from Async Storage
+    // load login details from Async Storage
     useEffect(() => {
         const checkUser = async () => {
             try {
@@ -28,8 +31,6 @@ const Stacknavigation = () => {
                 if (user) {
                     dispatch(addUser(JSON.parse(user)));
                 }
-
-                // console.log('user details: ', user)
             } catch (error) {
                 console.error('Error fetching user data:', error);
             } finally {
@@ -42,14 +43,13 @@ const Stacknavigation = () => {
         checkUser();
     }, []);
 
-    // Show the Splash Screen in the beginning
     if (loading) {
         return (
             <NavigationContainer>
                 <AuthStackNavigator initialRoute="Splashscreen" />
             </NavigationContainer>
         );
-    };
+    }
 
     return (
         <NavigationContainer>

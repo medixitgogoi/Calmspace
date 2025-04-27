@@ -1,7 +1,7 @@
 import { Image, StatusBar, Text, TouchableOpacity, View, ImageBackground, ScrollView, BackHandler, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { background, primary, secondary } from '../utils/colors';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
 import DailyQuote from '../components/DailyQuote';
 import Quiz from '../components/Quiz';
 import Features from '../components/Features';
@@ -9,17 +9,23 @@ import Blogs from '../components/Blogs';
 import { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { fetchUserData } from '../utils/fetchUserData';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from '../components/ProgressBar';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
-import Geolocation from '@react-native-community/geolocation';
+import { connectSocket } from '../redux/socketSlice';
+import { addUser } from '../redux/userSlice';
+// import Geolocation from '@react-native-community/geolocation';
+// import { addUser } from '../redux/userSlice';
 
 const Home = ({ navigation }) => {
 
-  const userDetails = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
-  const authToken = userDetails?.[0]?.authToken;
+  const userDetails = useSelector(state => state.user);
+  console.log('userDetails from Home: ', userDetails);
+
+  const authToken = userDetails?.authToken;
 
   const isFocused = useIsFocused();
 
@@ -33,38 +39,40 @@ const Home = ({ navigation }) => {
 
   const [location, setLocation] = useState(null);
 
+  const [userId, setUserId] = useState(null);
+
   // location
-  const requestLocationPermission = async () => {
-    if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    }
+  // const requestLocationPermission = async () => {
+  //   if (Platform.OS === 'android') {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+  //     );
+  //     return granted === PermissionsAndroid.RESULTS.GRANTED;
+  //   }
 
-    return true; // iOS handles permission in Info.plist
-  };
+  //   return true; // iOS handles permission in Info.plist
+  // };
 
-  const getCurrentLocation = async () => {
+  // const getCurrentLocation = async () => {
 
-    const hasPermission = await requestLocationPermission();
+  //   const hasPermission = await requestLocationPermission();
 
-    if (!hasPermission) return;
+  //   if (!hasPermission) return;
 
-    Geolocation.getCurrentPosition(
-      position => {
-        setLocation(position);
-      },
-      error => {
-        console.warn(error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
-  };
+  //   Geolocation.getCurrentPosition(
+  //     position => {
+  //       setLocation(position);
+  //     },
+  //     error => {
+  //       console.warn(error.message);
+  //     },
+  //     { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  //   );
+  // };
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
+  // useEffect(() => {
+  //   getCurrentLocation();
+  // }, []);
 
   // if (location) {
   //   console.log('location: ', location);
@@ -100,6 +108,9 @@ const Home = ({ navigation }) => {
 
           setUserName(data?.user?.name);
           setProfileScore(data?.questionScore);
+          setUserId(data?.user?._id);
+
+          dispatch(addUser(data?.user));
 
         } catch (error) {
           console.log('Error fetching user data: ', error);
@@ -113,6 +124,41 @@ const Home = ({ navigation }) => {
       return () => { }; // Cleanup function (optional)
     }, [])
   );
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const data = await fetchUserData(authToken); // Fetch user data
+
+  //         setUserName(data?.user?.name);
+  //         setProfileScore(data?.questionScore);
+  //         setUserId(data?.user?._id);
+
+  //         const userInfo = {
+  //           name: data?.user?.name,
+  //           email: data?.user?.email,
+  //           userId: data?.user?._id,
+  //         }
+
+  //         dispatch(addUser());
+
+  //       } catch (error) {
+  //         console.log('Error fetching user data: ', error);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+
+  //     fetchData();
+
+  //   }, [])
+  // );
+
+  // call connect socket
+  useEffect(() => {
+    dispatch(connectSocket({ userId: userId }));
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: background }}>
@@ -136,7 +182,7 @@ const Home = ({ navigation }) => {
             {/* logo */}
             <Image source={require('../assets/logoback_noName.png')} style={{ height: 40, width: 40 }} />
 
-            {/* name and location */}
+            {/* Name and location */}
             <View style={{ flexDirection: 'column' }}>
               <Text style={{ color: '#fff', fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.8), marginLeft: 2 }}>Hi, {userName?.split(' ')?.[0] || 'User'}</Text>
 

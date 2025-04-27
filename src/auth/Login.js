@@ -7,15 +7,18 @@ import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-di
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../redux/userSlice';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { setAuthStatus } from '../redux/socket/userSocketSlice';
-import useSocket from '../hooks/useSocket';
+// import { setAuthStatus } from '../redux/socket/userSocketSlice';
+// import useSocket from '../hooks/useSocket';
 
 const Login = ({ navigation }) => {
 
-    const { connectSocket } = useSocket(); // pull in connectSocket
+    const userDetails = useSelector(state => state.user);
+    // console.log('userDetails from login: ', userDetails);
+
+    // const { connectSocket } = useSocket(); // pull in connectSocket
 
     const dispatch = useDispatch();
 
@@ -78,36 +81,65 @@ const Login = ({ navigation }) => {
             // Handle success response
             if (response?.data?.status_code === 200) {
 
-                Toast.show({
-                    type: 'success',
-                    text1: 'Welcome Back! 🎉',
-                    text2: 'User logged in successfully',
-                    position: 'top',
-                    topOffset: 40,
-                });
+                if (response?.data?.role === 'user') {
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Welcome Back! 🎉',
+                        text2: 'User logged in successfully',
+                        position: 'top',
+                        topOffset: 40,
+                    });
 
-                const userInfo = {
-                    authToken: response?.data?.authToken,
-                    profileStatus: response?.data?.profileStatus
-                };
+                    const userInfo = {
+                        authToken: response?.data?.authToken,
+                        profileStatus: response?.data?.profileStatus,
+                    };
 
-                dispatch(addUser(userInfo));
-                dispatch(setAuthStatus(true)); // ✅ set auth status
+                    dispatch(addUser(userInfo));
 
-                await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+                    await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
 
-                connectSocket(); // ✅ call socket connection here
-
-                if (response?.data?.profileStatus) {
-                    navigation.navigate('Home')
+                    if (response?.data?.profileStatus) {
+                        navigation.navigate('Home')
+                    } else {
+                        navigation.navigate('Welcome')
+                    }
                 } else {
-                    navigation.navigate('Welcome')
+                    if (response?.data?.isVerified) {
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Welcome Back! 🎉',
+                            text2: 'Counselor logged in successfully',
+                            position: 'top',
+                            topOffset: 40,
+                        });
+
+                        const userInfo = {
+                            authToken: response?.data?.authToken,
+                            role: 'counselor'
+                        };
+
+                        dispatch(addUser(userInfo));
+
+                        await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+                        navigation.navigate('Dashboard');
+
+                    } else {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Your verification is yet to complete',
+                            text2: 'Please complete your verification and try again',
+                            position: 'top',
+                            topOffset: 40,
+                        });
+                    }
                 }
 
             } else if (response?.data?.status_code === 405) {
                 Toast.show({
                     type: 'error',
-                    text1: response?.data?.errors,
+                    text1: response?.data?.error,
                     text2: 'Check your input and try again.',
                     position: 'top',
                     topOffset: 40,
@@ -115,7 +147,7 @@ const Login = ({ navigation }) => {
             } else if (response?.data?.status_code === 404) {
                 Toast.show({
                     type: 'error',
-                    text1: response?.data?.errors,
+                    text1: response?.data?.error,
                     text2: 'Check your input and try again.',
                     position: 'top',
                     topOffset: 40,
@@ -123,7 +155,15 @@ const Login = ({ navigation }) => {
             } else if (response?.data?.status_code === 500) {
                 Toast.show({
                     type: 'error',
-                    text1: response?.data?.errors,
+                    text1: response?.data?.error,
+                    text2: 'Please try again.',
+                    position: 'top',
+                    topOffset: 40,
+                });
+            } else if (response?.data?.status_code === 401) {
+                Toast.show({
+                    type: 'error',
+                    text1: response?.data?.error,
                     text2: 'Please try again.',
                     position: 'top',
                     topOffset: 40,
@@ -132,8 +172,8 @@ const Login = ({ navigation }) => {
         } catch (error) {
             Toast.show({
                 type: 'error',
-                text1: 'Something went wrong',
-                text2: 'Please try again.',
+                text1: 'Something went wrong.',
+                text2: 'Please check your network connection and try again.',
                 position: 'top',
                 topOffset: 40,
             });
@@ -229,7 +269,7 @@ const Login = ({ navigation }) => {
                         <TouchableOpacity
                             onPress={handleLoginSubmit}
                             disabled={loading}
-                            style={{ backgroundColor: '#1f8dba', height: 50, borderRadius: 15, justifyContent: 'center', alignItems: 'center' }}
+                            style={{ backgroundColor: '#1f8dba', height: 53, borderRadius: 15, justifyContent: 'center', alignItems: 'center' }}
                         >
                             {loading ? (
                                 <ActivityIndicator size='large' color={'#fff'} />
@@ -239,13 +279,13 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
 
                         {/* Sign up / Don't have an account */}
-                        <TouchableOpacity style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', gap: 4 }}>
+                        <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', gap: 4 }}>
                             <Text style={{ color: '#bdbdbd', fontSize: responsiveFontSize(1.5), fontWeight: '500', fontFamily: 'Poppins-Medium' }}>Don't have an account?</Text>
 
-                            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                            <TouchableOpacity onPress={() => navigation.navigate('SignUp')} disabled={loading}>
                                 <Text style={{ color: '#1f8dba', fontWeight: '600', fontFamily: 'Poppins-SemiBold', fontSize: responsiveFontSize(1.5) }}>Sign Up</Text>
                             </TouchableOpacity>
-                        </TouchableOpacity>
+                        </View>
                     </ScrollView>
                 </View>
             </KeyboardAvoidingView>

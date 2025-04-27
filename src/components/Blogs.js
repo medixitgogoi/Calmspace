@@ -13,7 +13,7 @@ const Blogs = ({ navigation }) => {
 
     const userDetails = useSelector(state => state.user);
 
-    const authToken = userDetails?.[0]?.authToken;
+    const authToken = userDetails?.authToken;
 
     const [loading, setLoading] = useState(true);
 

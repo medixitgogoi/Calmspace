@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = [];
+const initialState = {};
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
         addUser: (state, action) => {
-            return [action.payload]; // Replace the entire state with the new user object in an array
+            return { ...state, ...action.payload }; // Merge new fields with existing state
         },
-        logoutUser: (state) => {
-            return state = [];
-        }
+        logoutUser: () => {
+            return {};
+        },
     },
-})
+});
 
 export const { addUser, logoutUser } = userSlice.actions;
 export default userSlice.reducer;

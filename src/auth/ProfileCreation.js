@@ -20,7 +20,7 @@ const ProfileCreation = ({ navigation }) => {
 
     const userDetails = useSelector(state => state.user);
 
-    const authToken = userDetails?.[0]?.authToken;
+    const authToken = userDetails?.authToken;
 
     const [questions, setQuestions] = useState(null);
 
@@ -94,22 +94,21 @@ const ProfileCreation = ({ navigation }) => {
                 const storedUserInfo = await AsyncStorage.getItem('userDetails');
 
                 if (storedUserInfo) {
-
                     const parsedUserInfo = JSON.parse(storedUserInfo);
 
-                    // Update profileStatus
+                    // Merge and update profileStatus
                     const updatedUserInfo = {
                         ...parsedUserInfo,
                         profileStatus: true,
                     };
 
-                    // Update Redux store
+                    // Update Redux state
                     dispatch(addUser(updatedUserInfo));
 
-                    // Update AsyncStorage
+                    // Persist updated user to AsyncStorage
                     await AsyncStorage.setItem('userDetails', JSON.stringify(updatedUserInfo));
-
                 }
+
             } else {
                 Toast.show({
                     type: 'error',

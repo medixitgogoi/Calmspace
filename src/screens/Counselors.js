@@ -177,7 +177,7 @@ const Counselors = ({ navigation }) => {
 
   const userDetails = useSelector(state => state.user);
 
-  const authToken = userDetails?.[0]?.authToken;
+  const authToken = userDetails?.authToken;
 
   const [counselors, setCounselors] = useState(null);
   const [preferredCounselors, setPreferredCounselors] = useState(null);

@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import LinearGradient from 'react-native-linear-gradient';
 import Home from '../screens/Home';
 import ProfileCreation from '../auth/ProfileCreation';
@@ -20,6 +19,10 @@ import { secondary } from '../utils/colors';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import BlogDetails from '../screens/BlogDetails';
 import CounselorDetails from '../screens/CounselorDetails';
+
+import Dashboard from '../screens/counselor/Dashboard';
+import UpdateProfile from '../screens/counselor/UpdateProfile';
+import QuickBoost from '../screens/counselor/QuickBoost';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -85,12 +88,19 @@ const TabNavigator = () => {
 const GuestStackNavigator = () => {
 
     const userDetails = useSelector(state => state.user);
-    const isProfileCreationDone = userDetails?.[0]?.profileStatus;
+    const isProfileCreationDone = userDetails?.profileStatus;
+    const isCounselor = userDetails?.role === 'counselor';
 
     return (
         <View style={{ flex: 1 }}>
             <Stack.Navigator
-                initialRouteName={isProfileCreationDone ? 'Main' : 'Welcome'}
+                initialRouteName={
+                    isCounselor
+                        ? 'Dashboard'
+                        : isProfileCreationDone
+                            ? 'Main'
+                            : 'Welcome'
+                }
                 screenOptions={{
                     headerShown: false,
                     animation: 'slide_from_right',
@@ -104,6 +114,11 @@ const GuestStackNavigator = () => {
                 <Stack.Screen name="PercentageShow" component={PercentageShow} />
                 <Stack.Screen name="BlogDetails" component={BlogDetails} />
                 <Stack.Screen name="CounselorDetails" component={CounselorDetails} />
+
+                {/* Counselor */}
+                <Stack.Screen name="Dashboard" component={Dashboard} />
+                <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                <Stack.Screen name="QuickBoost" component={QuickBoost} />
             </Stack.Navigator>
         </View>
     );

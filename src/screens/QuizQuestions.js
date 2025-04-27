@@ -18,7 +18,7 @@ const QuizQuestions = ({ navigation }) => {
 
     const userDetails = useSelector(state => state.user);
 
-    const authToken = userDetails?.[0]?.authToken;
+    const authToken = userDetails?.authToken;
 
     const [questions, setQuestions] = useState(null);
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -128,47 +128,49 @@ const QuizQuestions = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, paddingHorizontal: 10, paddingBottom: 12, justifyContent: 'space-between', flexDirection: 'column', backgroundColor: '#ecf9f9' }}>
-            <StatusBar hidden={false} barStyle='dark-content' />
+        <SafeAreaProvider>
+            <SafeAreaView style={{ flex: 1, paddingHorizontal: 10, paddingBottom: 12, justifyContent: 'space-between', flexDirection: 'column', backgroundColor: '#ecf9f9' }}>
+                <StatusBar hidden={false} barStyle='dark-content' />
 
-            <View style={{ width: '100%', paddingHorizontal: 8 }}>
-                <TouchableOpacity onPress={handleBack} disabled={currentQuestion === 0} style={{ marginBottom: 40, marginTop: 10 }}>
-                    <Icon name="arrow-left" size={24} color={currentQuestion === 0 ? '#ccc' : '#000'} />
-                </TouchableOpacity>
+                <View style={{ width: '100%', paddingHorizontal: 8 }}>
+                    <TouchableOpacity onPress={handleBack} disabled={currentQuestion === 0} style={{ marginBottom: 40, marginTop: 10 }}>
+                        <Icon name="arrow-left" size={24} color={currentQuestion === 0 ? '#ccc' : '#000'} />
+                    </TouchableOpacity>
 
-                {loading ? (
-                    <ShimmerPlaceHolder style={{ width: '100%', height: 50, borderRadius: 10, marginBottom: 30 }} />
-                ) : (
-                    <Text style={{ fontSize: responsiveFontSize(3), fontFamily: 'Poppins-Bold', marginBottom: 30, color: '#000' }}>
-                        {questions?.[currentQuestion]?.question}
-                    </Text>
-                )}
-
-                {loading ? [...Array(4)].map((_, index) => (
-                    <ShimmerPlaceHolder key={index} style={{ width: '97%', height: 60, borderRadius: 40, marginBottom: 20, alignSelf: 'center' }} />
-                )) : questions?.[currentQuestion]?.responses?.map((response, index) => {
-                    const selected = selectedResponses[questions?.[currentQuestion]?.question] === response.text;
-                    return (
-                        <TouchableOpacity key={index} style={{ borderColor: primary, borderWidth: 2, backgroundColor: selected ? primary : '#e1f3fa', paddingVertical: 13, paddingHorizontal: 15, borderRadius: 40, marginBottom: 20, alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row' }} onPress={() => handleSelection(response.text, response.weightage)}>
-                            <View style={{ width: 32, height: 32, borderRadius: 50, borderWidth: 2, borderColor: PRIMARY_COLOR, alignItems: 'center', justifyContent: 'center', marginRight: 10, backgroundColor: selected ? '#fff' : '#e1f3fa' }}>
-                                {selected && <Icon name="check" size={14} color={PRIMARY_COLOR} />}
-                            </View>
-                            <Text style={{ fontSize: responsiveFontSize(2), fontFamily: 'Poppins-SemiBold', color: selected ? '#fff' : '#000', flexShrink: 1, flexWrap: 'wrap' }}>{response.text}</Text>
-                        </TouchableOpacity>
-                    );
-                })}
-            </View>
-
-            <TouchableOpacity onPress={handleNext} disabled={!selectedResponses[questions?.[currentQuestion]?.question]}>
-                <LinearGradient colors={!selectedResponses[questions?.[currentQuestion]?.question] ? ['#c9c9c9', '#c9c9c9'] : [primary, primary]} style={{ height: 55, paddingHorizontal: 20, borderRadius: 60, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    {calculating ? (
-                        <ActivityIndicator color="#ffffff" size="large" />
+                    {loading ? (
+                        <ShimmerPlaceHolder style={{ width: '100%', height: 50, borderRadius: 10, marginBottom: 30 }} />
                     ) : (
-                        <Text style={{ color: '#ffffff', fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(2.2), textAlign: 'center' }}>{currentQuestion === questions?.length - 1 ? 'Finish' : 'Next'}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(3), fontFamily: 'Poppins-Bold', marginBottom: 30, color: '#000' }}>
+                            {questions?.[currentQuestion]?.question}
+                        </Text>
                     )}
-                </LinearGradient>
-            </TouchableOpacity>
-        </SafeAreaView>
+
+                    {loading ? [...Array(4)].map((_, index) => (
+                        <ShimmerPlaceHolder key={index} style={{ width: '97%', height: 60, borderRadius: 40, marginBottom: 20, alignSelf: 'center' }} />
+                    )) : questions?.[currentQuestion]?.responses?.map((response, index) => {
+                        const selected = selectedResponses[questions?.[currentQuestion]?.question] === response.text;
+                        return (
+                            <TouchableOpacity key={index} style={{ borderColor: primary, borderWidth: 2, backgroundColor: selected ? primary : '#e1f3fa', paddingVertical: 13, paddingHorizontal: 15, borderRadius: 40, marginBottom: 20, alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row' }} onPress={() => handleSelection(response.text, response.weightage)}>
+                                <View style={{ width: 32, height: 32, borderRadius: 50, borderWidth: 2, borderColor: PRIMARY_COLOR, alignItems: 'center', justifyContent: 'center', marginRight: 10, backgroundColor: selected ? '#fff' : '#e1f3fa' }}>
+                                    {selected && <Icon name="check" size={14} color={PRIMARY_COLOR} />}
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), fontFamily: 'Poppins-SemiBold', color: selected ? '#fff' : '#000', flexShrink: 1, flexWrap: 'wrap' }}>{response.text}</Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </View>
+
+                <TouchableOpacity onPress={handleNext} disabled={!selectedResponses[questions?.[currentQuestion]?.question]}>
+                    <LinearGradient colors={!selectedResponses[questions?.[currentQuestion]?.question] ? ['#c9c9c9', '#c9c9c9'] : [primary, primary]} style={{ height: 55, paddingHorizontal: 20, borderRadius: 60, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        {calculating ? (
+                            <ActivityIndicator color="#ffffff" size="large" />
+                        ) : (
+                            <Text style={{ color: '#ffffff', fontFamily: 'Poppins-Bold', fontSize: responsiveFontSize(2.2), textAlign: 'center' }}>{currentQuestion === questions?.length - 1 ? 'Finish' : 'Next'}</Text>
+                        )}
+                    </LinearGradient>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 };
 

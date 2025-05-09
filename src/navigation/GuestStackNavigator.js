@@ -23,6 +23,9 @@ import CounselorDetails from '../screens/CounselorDetails';
 import Dashboard from '../screens/counselor/Dashboard';
 import UpdateProfile from '../screens/counselor/UpdateProfile';
 import QuickBoost from '../screens/counselor/QuickBoost';
+import AddDetails from '../screens/counselor/AddDetails';
+import BoostChat from '../screens/BoostChat';
+import QuickBoostChat from '../screens/counselor/QuickBoostChat';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -113,12 +116,15 @@ const GuestStackNavigator = () => {
                 <Stack.Screen name="QuizQuestions" component={QuizQuestions} />
                 <Stack.Screen name="PercentageShow" component={PercentageShow} />
                 <Stack.Screen name="BlogDetails" component={BlogDetails} />
+                <Stack.Screen name="BoostChat" component={BoostChat} />
                 <Stack.Screen name="CounselorDetails" component={CounselorDetails} />
 
                 {/* Counselor */}
                 <Stack.Screen name="Dashboard" component={Dashboard} />
                 <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
                 <Stack.Screen name="QuickBoost" component={QuickBoost} />
+                <Stack.Screen name="QuickBoostChat" component={QuickBoostChat} />
+                <Stack.Screen name="AddDetails" component={AddDetails} />
             </Stack.Navigator>
         </View>
     );

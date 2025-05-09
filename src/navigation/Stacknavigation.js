@@ -7,7 +7,7 @@ import GuestStackNavigator from './GuestStackNavigator';
 import { addUser } from '../redux/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-axios.defaults.baseURL = 'https://calmspace-ts-server.onrender.com/api/';
+axios.defaults.baseURL = 'https://api.thecalmspace.in/api/';
 
 const Stacknavigation = () => {
 

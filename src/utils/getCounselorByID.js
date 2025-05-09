@@ -12,11 +12,11 @@ export const getCounselorByID = async (authToken) => {
         console.log('counselor by id response: ', response);
 
         if (response?.status === 201) {
-            return response?.data; // Return feature data
+            return response?.data;
         }
 
     } catch (error) {
         console.log("Error: ", error.message);
-        return null; // Return null in case of error
+        return null;
     }
 };

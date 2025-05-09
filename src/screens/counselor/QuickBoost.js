@@ -6,6 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { getCounselorByID } from '../../utils/getCounselorByID';
+import Toast from 'react-native-toast-message';
+import CounselorChat from '../../components/CounselorChat';
+import { primary, secondary } from '../../utils/colors';
 
 const QuickBoost = ({ navigation }) => {
 
@@ -44,16 +47,21 @@ const QuickBoost = ({ navigation }) => {
         }
     };
 
+    // getCounselorByID
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await getCounselorByID(authToken);
-                setDetails(data);
 
-                if (data?.status === 'online') {
-                    setIsAvailable(true);
-                } else {
-                    setIsAvailable(false);
+                if (data !== null) {
+
+                    setDetails(data);
+
+                    if (data?.status === 'online') {
+                        setIsAvailable(true);
+                    } else {
+                        setIsAvailable(false);
+                    }
                 }
 
             } catch (error) {
@@ -95,23 +103,47 @@ const QuickBoost = ({ navigation }) => {
                 </View>
 
                 {/* Toggle quick boost */}
-                <View style={styles.toggleContainer}>
-                    <Text style={styles.toggleText}>
-                        Make me available for Quick Boost
-                    </Text>
+                {details !== null && (
+                    <View style={styles.toggleContainer}>
+                        <Text style={styles.toggleText}>
+                            Make me available for Quick Boost
+                        </Text>
 
-                    <Switch
-                        value={isAvailable}
-                        onValueChange={handleToggle}
-                        trackColor={{ false: '#ccc', true: '#0ea5e9' }}
-                        thumbColor={isAvailable ? '#fff' : '#f4f3f4'}
-                    />
-                </View>
+                        <Switch
+                            value={isAvailable}
+                            onValueChange={handleToggle}
+                            trackColor={{ false: '#ccc', true: secondary }}
+                            thumbColor={isAvailable ? '#fff' : '#f4f3f4'}
+                        />
+                    </View>
+                )}
+
+                {/* Counselor Chat */}
+                {details !== null && <CounselorChat navigation={navigation} />}
+
+                {!loading && details === null && (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.9), color: '#0f172a', textAlign: 'center', fontFamily: 'Poppins-Medium', marginBottom: 15 }}>
+                            Please add your details first to access this feature.
+                        </Text>
+
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('AddDetails')}
+                            style={{ backgroundColor: '#0ea5e9', paddingVertical: 12, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                            <Ionicons name="add-circle-outline" size={22} color="#fff" style={{ marginRight: 8 }} />
+
+                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#fff', fontFamily: 'Poppins-SemiBold', letterSpacing: 1 }}>
+                                Add Details
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
                 {/* Full Screen Loader when toggleLoading */}
                 {toggleLoading && (
                     <View style={styles.loadingOverlay}>
-                        <ActivityIndicator size="large" color="#0ea5e9" />
+                        <ActivityIndicator size="large" color="#000" />
                     </View>
                 )}
             </SafeAreaView>
@@ -132,13 +164,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#e0f7fb',
+        backgroundColor: '#0ea5e9',
         padding: 10,
-        borderRadius: 10,
+        borderRadius: 12,
     },
     toggleText: {
         fontSize: responsiveFontSize(2),
-        color: '#333',
+        color: '#fff',
         fontFamily: 'Poppins-Medium',
     },
     loadingOverlay: {

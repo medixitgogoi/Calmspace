@@ -39,7 +39,7 @@ const SignUp = ({ navigation }) => {
             const data = {
                 name: name,
                 email: email,
-                age: age,  // Age as a number
+                age: age,
                 password: password,
                 gender: selectedGender,
                 role: selectedRole

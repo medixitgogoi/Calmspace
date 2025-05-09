@@ -4,10 +4,16 @@ import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { primary } from '../utils/colors';
+import { logoutUser } from '../redux/userSlice';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const { width, height } = Dimensions.get('window');
 
 const Sidebar = ({ visible, onClose, onLogout, onQuickBoost }) => {
+
+    const dispatch = useDispatch();
 
     const [sidebarPosition] = useState(new Animated.Value(-width * 0.60)); // Start position (off-screen)
 
@@ -34,6 +40,22 @@ const Sidebar = ({ visible, onClose, onLogout, onQuickBoost }) => {
 
     if (!visible) return null;
 
+    // logout Handler
+    const logOutHandler = async () => {
+        try {
+            dispatch(logoutUser());
+            await AsyncStorage.removeItem('userDetails');
+        } catch {
+            Toast.show({
+                type: 'error',
+                text1: 'Failed to log out',
+                text2: `Please try again`,
+                position: 'top',
+                topOffset: 40,
+            });
+        }
+    };
+
     return (
         <SafeAreaView style={{ ...StyleSheet.absoluteFillObject, flexDirection: 'row', zIndex: 10 }}>
             {/* Touchable background to close sidebar */}
@@ -52,6 +74,12 @@ const Sidebar = ({ visible, onClose, onLogout, onQuickBoost }) => {
                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 5 }} onPress={onQuickBoost}>
                     <Ionicons name="flash-outline" size={20} color="#0ea5e9" />
                     <Text style={{ fontSize: responsiveFontSize(2), fontFamily: 'Poppins-Medium', color: '#0f172a' }}>Quick Boost</Text>
+                </TouchableOpacity>
+
+                {/* Logout Option */}
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 5, marginTop: 20 }} onPress={logOutHandler}>
+                    <Ionicons name="log-out-outline" size={20} color="#ef4444" />
+                    <Text style={{ fontSize: responsiveFontSize(2), fontFamily: 'Poppins-Medium', color: '#ef4444' }}>Logout</Text>
                 </TouchableOpacity>
             </Animated.View>
         </SafeAreaView>

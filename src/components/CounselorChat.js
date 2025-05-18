@@ -15,7 +15,7 @@ const CounselorChat = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   // fetchUsers
-  const fetchUsers = async (isRefresh = false) => {
+  const fetchUsers = useCallback(async (isRefresh = false) => {
     if (isRefresh) {
       setRefreshing(true);
     } else {
@@ -35,22 +35,22 @@ const CounselorChat = ({ navigation }) => {
         setLoading(false);
       }
     }
-  };
+  }, [authToken]);
 
   // onRefresh function
   const onRefresh = useCallback(() => {
     fetchUsers(true);
-  }, [authToken]);
+  }, [fetchUsers]);
 
   useFocusEffect(
     useCallback(() => {
       fetchUsers();
-    }, [authToken])
+    }, [fetchUsers])
   );
 
   // chat card
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('QuickBoostChat', { id: item?._id })} style={{ flexDirection: 'row', alignItems: 'center', padding: 11, backgroundColor: '#e0f7fb', marginBottom: 12, borderRadius: 15, elevation: 2 }}>
+    <TouchableOpacity onPress={() => navigation.navigate('QuickBoostChat', { id: item?._id, name: item?.name })} style={{ flexDirection: 'row', alignItems: 'center', padding: 11, backgroundColor: '#e0f7fb', marginBottom: 12, borderRadius: 15, elevation: 2 }}>
       <Image source={{ uri: item?.pic }} style={{ width: 37, height: 37, borderRadius: 25, marginRight: 12 }} />
       <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontFamily: 'Poppins-Medium' }}>{item.name}</Text>
     </TouchableOpacity>
@@ -69,7 +69,7 @@ const CounselorChat = ({ navigation }) => {
       ) : users && users.length > 0 ? (
         <FlatList
           data={users}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, idx) => idx}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20, paddingHorizontal: 1, paddingTop: 10 }}

@@ -14,9 +14,8 @@ import ProgressBar from '../components/ProgressBar';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import { connectSocket } from '../redux/socketSlice';
-import { addUser } from '../redux/userSlice';
+import { addUser } from '../redux/UserSlice';
 // import Geolocation from '@react-native-community/geolocation';
-// import { addUser } from '../redux/userSlice';
 
 const Home = ({ navigation }) => {
 
@@ -109,11 +108,9 @@ const Home = ({ navigation }) => {
           setUserName(data?.user?.name);
           setProfileScore(data?.questionScore);
           setUserId(data?.user?._id);
-
           dispatch(addUser(data?.user));
-
         } catch (error) {
-          console.log('Error fetching user data: ', error);
+          console.log('Error fetching user data: XD', error);
         } finally {
           setLoading(false);
         }
@@ -122,13 +119,13 @@ const Home = ({ navigation }) => {
       fetchData();
 
       return () => { }; // Cleanup function (optional)
-    }, [])
+    }, [authToken, dispatch])
   );
 
   // call connect socket
   useEffect(() => {
     dispatch(connectSocket({ userId: userId }));
-  }, []);
+  }, [dispatch, userId]);
 
   // useFocusEffect(
   //   useCallback(() => {
@@ -172,13 +169,13 @@ const Home = ({ navigation }) => {
       {/* Header */}
       <ImageBackground
         source={require('../assets/imgback.jpg')}
-        style={{ overflow: 'hidden', paddingTop: isAndroid15 ? 40 : 0, paddingBottom: 30, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}
+        style={{ overflow: 'hidden', paddingTop: 40, paddingBottom: 30, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}
         resizeMode="cover"
       >
         {/* Info display */}
         <View style={{ height: responsiveHeight(6), flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '', paddingHorizontal: 10 }}>
           {/* Logo/display name */}
-          <View style={{ backgroundColor: '', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+          <View style={{ backgroundColor: '', flexDirection: 'row', alignItems: 'center', gap: 3, }}>
             {/* logo */}
             <Image source={require('../assets/logoback_noName.png')} style={{ height: 40, width: 40 }} />
 

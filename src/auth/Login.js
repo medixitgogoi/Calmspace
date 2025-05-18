@@ -8,10 +8,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser } from '../redux/userSlice';
+import { addUser } from '../redux/UserSlice';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-// import { setAuthStatus } from '../redux/socket/userSocketSlice';
-// import useSocket from '../hooks/useSocket';
 
 const Login = ({ navigation }) => {
 
@@ -64,20 +62,20 @@ const Login = ({ navigation }) => {
             setLoading(true);
 
             // Data object as per the API requirement
-            const data = {
+            const submitData = {
                 email: email,
                 password: password,
             };
 
             // API Call using axios
-            const response = await axios.post(`/auth/login`, data, {
+            const response = await axios.post(`/auth/login`, submitData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
             console.log('login response: ', response);
-
+            console.log("councelor login data", response?.data)
             // Handle success response
             if (response?.data?.status_code === 200) {
 
@@ -91,6 +89,7 @@ const Login = ({ navigation }) => {
                     });
 
                     const userInfo = {
+                        _id: response?.data?.user,
                         authToken: response?.data?.authToken,
                         profileStatus: response?.data?.profileStatus,
                     };
@@ -115,6 +114,7 @@ const Login = ({ navigation }) => {
                         });
 
                         const userInfo = {
+                            _id: response?.data?.user,
                             authToken: response?.data?.authToken,
                             role: 'counselor'
                         };
@@ -233,7 +233,7 @@ const Login = ({ navigation }) => {
                         />
 
                         {/* Password */}
-                        <View style={{ flexDirection: 'row', height: 48, borderRadius: 15, alignItems: 'center', borderColor: '#1f8dba', borderWidth: 1.5, backgroundColor: '#f3f3f3', borderRadius: 12, paddingHorizontal: 10, marginBottom: 4 }}>
+                        <View style={{ flexDirection: 'row', height: 48, borderRadius: 15, alignItems: 'center', borderColor: '#1f8dba', borderWidth: 1.5, backgroundColor: '#f3f3f3', paddingHorizontal: 10, marginBottom: 4 }}>
                             <TextInput
                                 placeholder="Password"
                                 value={password}

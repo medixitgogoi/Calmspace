@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addUser } from '../redux/userSlice';
+import { addUser } from '../redux/UserSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 

@@ -15,11 +15,8 @@ import { connectSocket } from '../redux/socketSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { fetchCounselors } from '../utils/fetchCounselors';
 import { primary } from '../utils/colors';
-import { subscribeToMessages } from '../utils/subscribeToMessages';
 
 const Boost = () => {
-
-  const socket = useSelector((state) => state.socket.socket);
 
   const dispatch = useDispatch();
 
@@ -36,10 +33,10 @@ const Boost = () => {
   // UseEffect to call connect socket
   useEffect(() => {
     dispatch(connectSocket({ userId: userDetails?._id }));
-  }, []);
+  }, [dispatch, userDetails?._id]);
 
   // Fetch counselors
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const data = await fetchCounselors(authToken);
@@ -50,13 +47,13 @@ const Boost = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authToken]);
 
   // Fetch counselors when focus changes or authToken changes
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [authToken])
+    }, [fetchData])
   );
 
   // Handle pull to refresh
@@ -98,7 +95,7 @@ const Boost = () => {
           }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 20, height: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 6 }}>
-                <FontAwesome name="check-circle" size={16} color={primary} /> {/* Changed icon here */}
+                <FontAwesome name="check-circle" size={16} color={primary} />
               </View>
 
               <Text style={{ fontSize: responsiveFontSize(1.7), fontFamily: 'Poppins-Medium', color: '#000' }}>
@@ -129,7 +126,7 @@ const Boost = () => {
           <Text style={{ marginLeft: 4, color: '#fff', fontFamily: 'Poppins-Medium' }}>Voice Chat</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('BoostChat', { id: item?.counselorId?._id })} style={{ flexDirection: 'row', width: '48%', alignItems: 'center', backgroundColor: '#0984e3', paddingVertical: 10, justifyContent: 'center', borderRadius: 12 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('BoostChat', { id: item?.counselorId?._id, name: item?.counselorId?.name })} style={{ flexDirection: 'row', width: '48%', alignItems: 'center', backgroundColor: '#0984e3', paddingVertical: 10, justifyContent: 'center', borderRadius: 12 }}>
           <MaterialCommunityIcons name="message-text-outline" size={18} color="#fff" />
           <Text style={{ marginLeft: 4, color: '#fff', fontFamily: 'Poppins-Medium' }}>Text Chat</Text>
         </TouchableOpacity>

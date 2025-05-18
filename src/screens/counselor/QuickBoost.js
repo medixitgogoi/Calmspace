@@ -16,13 +16,11 @@ import { connectSocket } from '../../redux/socketSlice';
 
 const QuickBoost = ({ navigation }) => {
 
-    const socket = useSelector((state) => state.socket.socket);
-    console.log('socket from Quick Boost: ', socket);
-
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
     const authToken = userDetails?.authToken;
+    console.log("userDetails", userDetails)
 
     const [isAvailable, setIsAvailable] = useState(false);
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import AuthStackNavigator from './AuthStackNavigator';
 import GuestStackNavigator from './GuestStackNavigator';
-import { addUser } from '../redux/userSlice';
+import { addUser } from '../redux/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 axios.defaults.baseURL = 'https://api.thecalmspace.in/api/';

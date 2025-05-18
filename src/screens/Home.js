@@ -23,7 +23,7 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const userDetails = useSelector(state => state.user);
-  console.log('userDetails from Home: ', userDetails);
+  // console.log('userDetails from Home: ', userDetails);
 
   const authToken = userDetails?.authToken;
 
@@ -125,6 +125,11 @@ const Home = ({ navigation }) => {
     }, [])
   );
 
+  // call connect socket
+  useEffect(() => {
+    dispatch(connectSocket({ userId: userId }));
+  }, []);
+
   // useFocusEffect(
   //   useCallback(() => {
   //     const fetchData = async () => {
@@ -154,11 +159,6 @@ const Home = ({ navigation }) => {
 
   //   }, [])
   // );
-
-  // call connect socket
-  useEffect(() => {
-    dispatch(connectSocket({ userId: userId }));
-  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: background }}>

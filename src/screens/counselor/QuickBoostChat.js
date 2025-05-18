@@ -23,7 +23,7 @@ const QuickBoostChat = ({ navigation, route }) => {
 
     const dispatch = useDispatch();
     const selectedUser = useSelector((state) => state.chat.selectedUser);
-    const socket = useSelector((state) => state.chat.socket);
+    const socket = useSelector((state) => state.socket.socket);
     const messages = useSelector((state) => state.chat.messages);
 
     useEffect(() => {
@@ -52,6 +52,9 @@ const QuickBoostChat = ({ navigation, route }) => {
 
             console.log('get message response: ', response);
 
+            if (response?.status === 200) {
+                subscribeToMessages(socket, id);
+            }
 
         } catch (error) {
             console.log('error: ', error);
@@ -60,15 +63,7 @@ const QuickBoostChat = ({ navigation, route }) => {
 
     useEffect(() => {
         getMessage();
-
-        if (socket) {
-            subscribeToMessages(socket, id);
-        }
-
-        // return () => {
-        //     dispatch(unsubscribeFromMessages());
-        // };
-    }, [dispatch, selectedUser, socket]);
+    }, [dispatch]);
 
     const renderItem = ({ item }) => (
         <View style={{

@@ -10,8 +10,11 @@ import InfoRow from '../../components/InfoRow';
 import Sidebar from '../../components/Sidebar';
 import LottieView from 'lottie-react-native';
 import { getCounselorByID } from '../../utils/getCounselorByID';
+import { connectSocket } from '../../redux/socketSlice';
 
 const Dashboard = ({ navigation }) => {
+
+    const dispatch = useDispatch();
 
     const [sidebarVisible, setSidebarVisible] = useState(false);
 
@@ -25,6 +28,8 @@ const Dashboard = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [userLoading, setUserLoading] = useState(true);
     const [counselorLoading, setCounselorLoading] = useState(true);
+
+    const [userId, setUserId] = useState(null);
 
     // fetchUserData
     useFocusEffect(
@@ -53,6 +58,8 @@ const Dashboard = ({ navigation }) => {
                 try {
                     const data = await getCounselorByID(authToken);
 
+                    setUserId(data?.counselorId?._id);
+
                     if (data?.degree) {
                         setNewCounselor(false);
                     } else {
@@ -78,23 +85,30 @@ const Dashboard = ({ navigation }) => {
     }, [userLoading, counselorLoading]);
 
     // loading UI
-    if (loading) {
-        return (
-            <SafeAreaProvider>
-                <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ecf9f9' }}>
-                    {/* Lottie Animation */}
-                    <View style={{ width: 270, height: 270, alignSelf: 'center', marginBottom: 20 }}>
-                        <LottieView
-                            source={require('../../assets/animations/loading.json')}
-                            autoPlay
-                            loop
-                            style={{ height: '100%', alignSelf: 'center', marginBottom: 20, width: '100%' }}
-                        />
-                    </View>
-                </SafeAreaView>
-            </SafeAreaProvider>
-        );
-    };
+    // if (loading) {
+    //     return (
+    //         <SafeAreaProvider>
+    //             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ecf9f9' }}>
+    //                 {/* Lottie Animation */}
+    //                 <View style={{ width: 270, height: 270, alignSelf: 'center', marginBottom: 20 }}>
+    //                     <LottieView
+    //                         source={require('../../assets/animations/loading.json')}
+    //                         autoPlay
+    //                         loop
+    //                         style={{ height: '100%', alignSelf: 'center', marginBottom: 20, width: '100%' }}
+    //                     />
+    //                 </View>
+    //             </SafeAreaView>
+    //         </SafeAreaProvider>
+    //     );
+    // };
+
+    // call connect socket
+    useEffect(() => {
+        if (userId) {
+            dispatch(connectSocket({ userId: userId }));
+        }
+    }, [userId]);
 
     return (
         <SafeAreaProvider>

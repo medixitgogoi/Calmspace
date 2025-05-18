@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Dimensions, Animated, StyleSheet, Image } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +15,7 @@ const Sidebar = ({ visible, onClose, onLogout, onQuickBoost }) => {
 
     const dispatch = useDispatch();
 
-    const [sidebarPosition] = useState(new Animated.Value(-width * 0.60)); // Start position (off-screen)
+    const [sidebarPosition] = useState(new Animated.Value(-width * 0.60));
 
     useEffect(() => {
         if (visible) {

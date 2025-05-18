@@ -13,12 +13,15 @@ const socketSlice = createSlice({
     initialState,
     reducers: {
         connectSocket: (state, action) => {
+
             const { userId } = action.payload;
 
             if (!socketInstance && userId) {
-                socketInstance = io('https://calmspace-ts-server.onrender.com/', {
+                socketInstance = io('https://api.thecalmspace.in/', {
                     query: { userId: userId },
                 });
+
+                console.log('socket from socket slice: ', socketInstance);
 
                 state.socket = socketInstance;
                 state.isConnected = true;

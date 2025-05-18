@@ -1,16 +1,25 @@
-import { useEffect, useState } from 'react';
+// This is the counselor screen for Quick Boost. For user Quick Boost screen, it is named as Boost.
+
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, StatusBar, Switch, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { getCounselorByID } from '../../utils/getCounselorByID';
 import Toast from 'react-native-toast-message';
 import CounselorChat from '../../components/CounselorChat';
 import { primary, secondary } from '../../utils/colors';
+import { useFocusEffect } from '@react-navigation/native';
+import { connectSocket } from '../../redux/socketSlice';
 
 const QuickBoost = ({ navigation }) => {
+
+    const socket = useSelector((state) => state.socket.socket);
+    console.log('socket from Quick Boost: ', socket);
+
+    const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
     const authToken = userDetails?.authToken;
@@ -48,31 +57,41 @@ const QuickBoost = ({ navigation }) => {
     };
 
     // getCounselorByID
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getCounselorByID(authToken);
+    useFocusEffect(
+        useCallback(() => {
+            let isActive = true;
 
-                if (data !== null) {
+            const fetchData = async () => {
+                try {
+                    const data = await getCounselorByID(authToken);
 
-                    setDetails(data);
+                    if (data !== null && isActive) {
+                        setDetails(data);
 
-                    if (data?.status === 'online') {
-                        setIsAvailable(true);
-                    } else {
-                        setIsAvailable(false);
+                        if (data?.status === 'online') {
+                            setIsAvailable(true);
+                        } else {
+                            setIsAvailable(false);
+                        }
+                    }
+
+                } catch (error) {
+                    console.log('Error fetching counselor: ', error);
+                } finally {
+                    if (isActive) {
+                        setLoading(false);
                     }
                 }
+            };
 
-            } catch (error) {
-                console.log('Error fetching counselor: ', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+            fetchData();
 
-        fetchData();
-    }, []);
+            return () => {
+                isActive = false; // Cleanup on unfocus
+            };
+
+        }, [authToken]) // dependencies
+    );
 
     if (loading) {
         return (
@@ -82,7 +101,7 @@ const QuickBoost = ({ navigation }) => {
                 </SafeAreaView>
             </SafeAreaProvider>
         );
-    }
+    };
 
     return (
         <SafeAreaProvider>

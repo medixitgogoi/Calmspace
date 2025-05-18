@@ -1,3 +1,6 @@
+// This is the user screen for Quick Boost. For counselor Quick Boost screen, it is named as QuickBoost.
+
+
 import { useCallback, useEffect, useState } from 'react';
 import { StatusBar, TouchableOpacity, View, FlatList, Image, ActivityIndicator, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -17,13 +20,13 @@ import { subscribeToMessages } from '../utils/subscribeToMessages';
 const Boost = () => {
 
   const socket = useSelector((state) => state.socket.socket);
-  const isConnected = useSelector((state) => state.socket.isConnected);
 
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
   const userDetails = useSelector(state => state.user);
+
   const authToken = userDetails?.authToken;
 
   const [onlineCounselors, setOnlineCounselors] = useState(null);
@@ -34,12 +37,6 @@ const Boost = () => {
   useEffect(() => {
     dispatch(connectSocket({ userId: userDetails?._id }));
   }, []);
-
-  useEffect(() => {
-    if (socket) {
-      subscribeToMessages(socket);
-    }
-  }, [socket]);
 
   // Fetch counselors
   const fetchData = async () => {

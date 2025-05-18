@@ -10,11 +10,11 @@ import { subscribeToMessages } from '../utils/subscribeToMessages';
 
 const BoostChat = ({ navigation, route }) => {
 
-    const socket = useSelector((state) => state.socket.socket);
+    // const socket = useSelector((state) => state.socket.socket);
     // console.log('socket: ', socket);
 
     const socketmessages = useSelector((state) => state.chat.messages);
-    console.log('messages from socket: ', socketmessages);
+    // console.log('messages from socket: ', socketmessages);
 
     const dispatch = useDispatch();
 
@@ -28,6 +28,9 @@ const BoostChat = ({ navigation, route }) => {
     const [messages, setMessages] = useState([]);
 
     const [bottomPadding, setBottomPadding] = useState(0);
+
+    const socket = useSelector((state) => state.socket.socket);
+    // const messages = useSelector((state) => state.chat.messages);
 
     // keyboard adjustment
     useEffect(() => {
@@ -96,6 +99,10 @@ const BoostChat = ({ navigation, route }) => {
                 },
             });
 
+            if (response?.status === 200) {
+                subscribeToMessages(socket, id);
+            }
+
             console.log('get message response: ', response);
 
         } catch (error) {
@@ -104,13 +111,25 @@ const BoostChat = ({ navigation, route }) => {
     };
 
     useEffect(() => {
+
         getMessage();
 
-        if (socket) {
-            subscribeToMessages(socket, id);
-        }
+    }, [dispatch]);
 
-    }, [dispatch, socket]);
+    // useEffect(() => {
+    //     getMessage();
+
+    //     if (socket.connected) {
+    //         subscribeToMessages(socket, id);
+    //     }
+    // }, [dispatch, socket, id, getMessage, subscribeToMessages]);
+
+    // useEffect(() => {
+    //     getMessage();
+
+    //     subscribeToMessages();
+
+    // }, [dispatch, socket, id, getMessage, subscribeToMessages])
 
     return (
         <SafeAreaProvider>

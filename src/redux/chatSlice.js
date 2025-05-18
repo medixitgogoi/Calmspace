@@ -17,7 +17,7 @@ const chatSlice = createSlice({
     },
 });
 
-export const { setSelectedUser, addMessage, clearMessages } = chatSlice.actions;
+export const { addMessage, clearMessages } = chatSlice.actions;
 
 export default chatSlice.reducer;
 

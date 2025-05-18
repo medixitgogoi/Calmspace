@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -45,6 +45,7 @@ const TabNavigator = () => {
                     borderTopLeftRadius: 18,
                     borderTopRightRadius: 18,
                     overflow: 'hidden',
+                    paddingBottom: Platform.OS === 'ios' ? 50 : 0
                 },
                 tabBarBackground: () => <TabBarBackground />,
                 tabBarItemStyle: { paddingVertical: 3 },
@@ -107,6 +108,7 @@ const GuestStackNavigator = () => {
                 screenOptions={{
                     headerShown: false,
                     animation: 'slide_from_right',
+                    style: { marginTop: Platform.OS === 'ios' ? 40 : 0 },
                 }}
             >
                 <Stack.Screen name="Welcome" component={Welcome} />

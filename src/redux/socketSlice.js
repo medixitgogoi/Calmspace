@@ -17,13 +17,13 @@ const socketSlice = createSlice({
             const { userId } = action.payload;
 
             if (!socketInstance && userId) {
-                socketInstance = io('https://api.thecalmspace.in/', {
-                    query: { userId: userId },
-                });
+                // socketInstance = io('https://api.thecalmspace.in/', {
+                //     query: { userId: userId },
+                // });
 
-                console.log('socket from socket slice: ', socketInstance);
+                // console.log('socket from socket slice: ', socketInstance);
 
-                state.socket = socketInstance;
+                // state.socket = socketInstance;
                 state.isConnected = true;
             }
         },
@@ -31,7 +31,7 @@ const socketSlice = createSlice({
             if (socketInstance) {
                 socketInstance.disconnect();
                 socketInstance = null;
-                state.socket = null;
+                // state.socket = null;
                 state.isConnected = false;
             }
         },

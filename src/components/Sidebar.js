@@ -4,7 +4,7 @@ import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { primary } from '../utils/colors';
-import { logoutUser } from '../redux/userSlice';
+import { logoutUser } from '../redux/UserSlice';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';

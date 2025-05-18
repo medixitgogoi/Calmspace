@@ -101,7 +101,7 @@ const Blogs = ({ navigation }) => {
                         data={blogs}
                         horizontal
                         showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item, idx) => idx}
                         contentContainerStyle={{ paddingHorizontal: 10 }}
                         renderItem={({ item }) => (
                             <TouchableOpacity

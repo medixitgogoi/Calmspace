@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { Image, StatusBar, Text, TouchableOpacity, View, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import { logoutUser } from '../redux/userSlice';
+import { logoutUser } from '../redux/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -58,14 +58,14 @@ const Profile = ({ navigation }) => {
                 } catch (error) {
                     console.log('Error fetching user data: ', error);
                 } finally {
-                    setLoading(false);
+                    // setLoading(false);
                 }
             };
 
             fetchData();
 
             return () => { };
-        }, [])
+        }, [authToken])
     );
 
     return (
